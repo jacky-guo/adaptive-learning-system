@@ -4,27 +4,48 @@
 
 
 ## 帳號
+
 ### 登入
+
 **URL**
+
 ```
 POST /elearning/auth/login
 ```
 
-**参数**
+**請求参数**
 
 | 參數名稱 | 參數類型 | 參數描述 |
 | :-: | :-: | :-: |
-| username | String | 用戶名 |
-| password | String | 密碼 |
+| username | String | 用戶帳號 |
+| password | String | 用戶密碼 |
+
+**響應参数**
+
+| 參數名稱 | 參數類型 | 參數描述 |
+| :-: | :-: | :-: |
+| userId | String | 用戶ID |
+| userAccount | String | 用戶帳號 |
+| userName | String | 用戶姓名 |
+| userEmail | String | 郵箱 |
+| userGrade | String | 年級 |
+| userSchool | String | 學校 |
+| userRank | String | 排名 |
+| userLevel | Int | 程度 |
+| userIdentity | Int | 身份 |
+| lastloginTime | Timestamp | 最後登入時間 |
 
 **示例**
 
 請求
+
 ```
 username: "admin"
 password: "admin"
 ```
+
 響應(正確)
+
 ```
 {
     "code": 0,
@@ -44,7 +65,9 @@ password: "admin"
         }]
 }
 ```
+
 響應(錯誤)
+
 ```
 {
     "code": 401,
@@ -52,16 +75,24 @@ password: "admin"
     "data" null
 }
 ```
+
 ### 註冊
+
+**URL**
+
 ```
 POST /elearning/auth/register
 ```
+
 参数
+
 ```
 username: "admin"
 password: "admin"
 ```
+
 返回
+
 ```
 {
     "code": 0,
