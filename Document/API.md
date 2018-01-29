@@ -11,12 +11,13 @@ POST /elearning/auth/login
 ```
 
 **参数**
-|參數名稱|參數類型|參數描述|
-|:-:|:-:|:-:|
-|username   |String     |用戶名    |
-|password   |String     |密碼     |
+參數名稱 | 參數類型 | 參數描述 
+:-: | :-: | :-: |
+username | String | 用戶名
+password | String | 密碼
 
 **示例**
+
 請求
 ```
 username: "admin"
