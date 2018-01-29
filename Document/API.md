@@ -5,29 +5,25 @@
 
 ## 帳號
 ### 登入
-URL
+**URL**
 ```
 POST /elearning/auth/login
 ```
-参数
-username| String |用戶名
-password| String |密碼
 
+**参数**
+|參數名稱|參數類型|參數描述|
+|:-:|:-:|:-:|
+|username   |String     |用戶名    |
+|password   |String     |密碼     |
 
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-```
-
+**示例**
+請求
 ```
 username: "admin"
 password: "admin"
 ```
-返回(正確)
+響應
+(正確)
 ```
 {
     "code": 0,
@@ -47,7 +43,7 @@ password: "admin"
         }]
 }
 ```
-返回(錯誤)
+(錯誤)
 ```
 {
     "code": 401,
