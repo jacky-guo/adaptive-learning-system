@@ -22,7 +22,7 @@ POST /elearning/word/insert
 | :-: | :-: | :-: | :-: |
 | wordId | Int | 單字ID(需為空，自動添加) | 必須為null |
 | wordLevel | Int | 單字難易度 | [x] |
-| wordContent | String | 單字內容(需小於128字元) | x |
+| wordContent | String | 單字內容(需小於128字元) | :x: |
 | wordPartofspeech | String | 單字詞性 | [x] |
 | wordInterpretation | String | 單字解釋 | [x] |
 | wordGrade | String | 單字所屬年級 | [x] | 
