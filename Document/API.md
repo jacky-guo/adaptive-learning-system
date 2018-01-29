@@ -11,10 +11,10 @@ POST /elearning/auth/login
 ```
 
 **参数**
-參數名稱 | 參數類型 | 參數描述 
-:-: | :-: | :-: |
-username | String | 用戶名
-password | String | 密碼
+| 參數名稱 | 參數類型 | 參數描述 |
+| :-: | :-: | :-: |
+| username | String | 用戶名 |
+| password | String | 密碼 |
 
 **示例**
 
@@ -23,8 +23,7 @@ password | String | 密碼
 username: "admin"
 password: "admin"
 ```
-響應
-(正確)
+響應(正確)
 ```
 {
     "code": 0,
@@ -44,7 +43,7 @@ password: "admin"
         }]
 }
 ```
-(錯誤)
+響應(錯誤)
 ```
 {
     "code": 401,
