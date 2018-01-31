@@ -177,12 +177,11 @@ POST /elearning/word/insert
 
 | 參數名稱 | 參數類型 | 參數描述 | 可否為null |
 | :-: | :-: | :-: | :-: |
-| wordId | Int | 單字ID(需為空，自動添加) | 必須為null |
-| wordLevel | Int | 單字難易度 | :o: |
 | wordContent | String | 單字內容(需小於128字元) | :x: |
-| wordPartofspeech | String | 單字詞性 | :o: |
-| wordInterpretation | String | 單字解釋 | :o: |
 | wordGrade | String | 單字所屬年級 | :x: | 
+| wordPartofspeech | String | 單字詞性 | :x: |
+| wordLevel | Int | 單字難易度 | :o: |
+| wordInterpretation | String | 單字解釋 | :o: |
 | createBy | String | 創建帳號 | :o: |
 | updateBy | String | 修改帳號 | :o: |
 | wordSource | String | 單字來源(尚未定義) | :o: |
@@ -240,7 +239,7 @@ Delete /elearning/word/delete
 
 | 參數名稱 | 參數類型 | 參數描述 | 可否為null |
 | :-: | :-: | :-: | :-: |
-| wordId | Int | 單字ID(需為空，自動添加) | :x: |
+| wordId | Int | 需要刪除的單字的ID | :x: |
 
 **響應参数**
 
@@ -274,7 +273,94 @@ wordId: 1
 }
 ```
 
-### 单字查询
+### 單字查詢
+
+#### 相似搜尋
+
+**URL**
+```
+Get /elearning/word/query
+```
+
+**請求参数**
+
+| 參數名稱 | 參數類型 | 參數描述 | 可否為null |
+| :-: | :-: | :-: | :-: |
+| wordContent | String | 欲查詢的單字或以此開頭的單字 | :x: |
+| page | Int | 頁數(default為0) | :o: |
+| size | Int | 每頁顯示數量(default為20) | :o: |
+
+**響應参数**
+
+| 參數名稱 | 參數類型 | 參數描述 |
+| :-: | :-: | :-: |
+| wordList | List<Word> | 單字列表[單字細節](#) |
+| count | Int | 符合條件的單字個數 |
+
+**示例**
+
+請求
+
+```
+wordContent: "like"
+page: 0
+size: 20
+```
+
+響應(正確)
+
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "wordList": [
+            {
+                "wordId": 1,
+                "wordLevel": 326,
+                "wordLength": 4,
+                "wordContent": "like",
+                "wordPartofspeech": "verb",
+                "wordInterpretation": "喜歡",
+                "wordGrade": "3",
+                "wordSource": "",
+                "createBy": "admin",
+                "updateBy": "",
+                "createTime": 1507029667000,
+                "updateTime": 1507205646000
+            },
+            ...
+            {
+                "wordId": 4,
+                "wordLevel": 526,
+                "wordLength": 10,
+                "wordContent": "likelihood",
+                "wordPartofspeech": "noun",
+                "wordInterpretation": "可能",
+                "wordGrade": "5",
+                "wordSource": "",
+                "createBy": "admin",
+                "updateBy": "",
+                "createTime": 1507029667000,
+                "updateTime": 1507205646000
+            }
+        ],
+        "count": 4
+    }            
+}
+```
+
+響應(錯誤)
+
+```
+{
+    "code": 400,
+    "msg": "參數不正確",
+    "data": null
+}
+```
+
+#### 按年級或難易度查詢單字
 
 **URL**
 ```
@@ -285,15 +371,18 @@ Get /elearning/word/list
 
 | 參數名稱 | 參數類型 | 參數描述 | 可否為null |
 | :-: | :-: | :-: | :-: |
-| grade | String | 單字ID(需為空，自動添加) | :x: |
+| grade | String | 欲查詢年級(grade和level不能同時為空) | :o: |
+| level | Int | 欲查詢難易度 | :o: |
+| range | Int | 難易度範圍(default為5) | :o: |
 | page | Int | 頁數(default為0) | :o: |
-| size | Int | 每頁顯示數量(default為20) | :0: |
+| size | Int | 每頁顯示數量(default為20) | :o: |
 
 **響應参数**
 
 | 參數名稱 | 參數類型 | 參數描述 |
 | :-: | :-: | :-: |
-| wordId | Int | 單字ID |
+| wordList | List<Word> | 單字列表[單字細節](#) |
+| count | Int | 符合條件的單字個數 |
 
 **示例**
 
@@ -312,7 +401,7 @@ size: 20
     "code": 0,
     "msg": "成功",
     "data": {
-        "data": [
+        "wordList": [
             {
                 "wordId": 1,
                 "wordLevel": 326,
