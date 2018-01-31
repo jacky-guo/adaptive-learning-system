@@ -8,7 +8,12 @@
 + [教材](#教材)
 + [考卷](#考卷)
 
-返回代碼: 0
+## 錯誤碼
+
+| 錯誤碼 | 錯誤描述 | 備註 |
+| :-: | :-: | :-: |
+| 0 | 成功 |  |
+| 400 | 參數錯誤 |  |
 
 ## 帳號
 
@@ -44,7 +49,7 @@ POST /elearning/auth/login
 
 **示例**
 
-請求
+請求參數
 
 ```
 username: "admin"
@@ -115,7 +120,7 @@ POST /elearning/auth/register
 
 **示例**
 
-請求
+請求參數
 
 ```
 username: "admin"
@@ -194,7 +199,7 @@ POST /elearning/word/insert
 
 **示例**
 
-請求
+請求參數
 
 ```
 wordId: 10943
@@ -247,7 +252,7 @@ Delete /elearning/word/delete
 
 **示例**
 
-請求
+請求參數
 
 ```
 wordId: 1
@@ -299,7 +304,7 @@ Get /elearning/word/query
 
 **示例**
 
-請求
+請求參數
 
 ```
 wordContent: "like"
@@ -386,7 +391,7 @@ Get /elearning/word/list
 
 **示例**
 
-請求
+請求參數
 
 ```
 grade: "3"
