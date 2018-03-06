@@ -1,3 +1,4 @@
++ [前言](#前言)
 + [帳號](#帳號)
     + [登入](#登入)
     + [註冊](#註冊)
@@ -10,22 +11,24 @@
 + [教材](#教材)
 + [考卷](#考卷)
 + [附錄](#附錄)
+    + [錯誤碼列表](#錯誤碼列表)
+    + [年級列表](#年級列表)
 + [API更新日誌](#API更新日誌)
 
 ## 前言
 
 ### 返回參數格式說明
 
-调用方需判断http的响应码：
+調用方需判斷HTTP的響應碼：
 
-* 200表调用成功
-* 500，502表系统内部错误，可稍后再试
-* 401表未授权
-* 403表禁止访问 通常以Json格式返回，返回格式如下：
+* 200表調用成功
+* 500,502表系統內部錯誤，可稍後再試
+* 400Bad Request（例如：參數型態有誤）
+* 401表未授權
+* 403表禁止訪問
+* 405表POST / GET模式請求錯誤
 
-POST请求或GET请求
-
-当http响应200时，接口返回的数据格式如下
+當HTTP響應200時，接口返回的數據格式如下
 
 ```
 {"code": 错误码, "message": "success", "data":""}
@@ -289,7 +292,7 @@ wordId: 1
 ```
 {
     "code": 40004,
-    "msg": "刪除內容不存在",
+    "msg": "內容不存在",
     "data": null
 }
 ```
@@ -392,7 +395,7 @@ Get /elearning/word/list
 
 | 參數名稱 | 參數類型 | 參數描述 | 可否為null |
 | :-: | :-: | :-: | :-: |
-| grade | String | 欲查詢年級(grade和level不能同時為空) | :o: |
+| grade | String | 欲查詢年級(grade和level不能同時為空)(default為3) | :o: |
 | level | Int | 欲查詢難易度 | :o: |
 | range | Int | 難易度範圍(default為5) | :o: |
 | page | Int | 頁數(default為0) | :o: |
@@ -468,6 +471,297 @@ size: 20
 }
 ```
 
+## 教材
+
+### 新增教材
+
+**URL**
+```
+POST /elearning/paragraph/insert
+```
+
+**請求参数**
+
+| 參數名稱 | 參數類型 | 參數描述 | 可否為null |
+| :-: | :-: | :-: | :-: |
+| paragraphId | Int | 教材ID | :o: |
+| paragraphLevel | Int | 教材難易度 | :o: | 
+| paragraphContent | String | 教材內容 | :x: |
+| paragraphHashtag | String | 教材標籤 | :o: |
+| paragraphGrade | String | 教材所屬年級 | :x: |
+| paragraphSource | String | 教材來源 | :o: |
+| createBy | String | 創建帳號 | :o: |
+| updateBy | String | 修改帳號 | :o: |
+
+**響應参数**
+
+| 參數名稱 | 參數類型 | 參數描述 |
+| :-: | :-: | :-: |
+| wordList | List<Word> | 新出現的單字列表[單字細節](#) |
+| ParagraphId | Int | 教材ID |
+
+**示例**
+
+請求參數
+
+```
+paragraphId: 1
+paragraphLevel: 600
+paragraphContent: " Two Halloween fireballs ... in the night sky. "
+paragraphHashtag: "Halloween fireballs"
+paragraphGrade: "3"
+paragraphSource: "第一单元"
+createBy: "admin"
+updateBy: "admin"
+```
+
+響應(正確)
+
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "wordList": [
+            {
+                "wordId": null,
+                "wordLevel": null,
+                "wordLength": null,
+                "wordContent": "Halloween",
+                "wordPartofspeech": "adjective",
+                "wordInterpretation": null,
+                "wordGrade": 3,
+                "wordSource": "第一单元",
+                "createBy": "admin",
+                "updateBy": null,
+                "createTime": null,
+                "updateTime": null
+            },
+            ...
+            {
+                "wordId": null,
+                "wordLevel": null,
+                "wordLength": null,
+                "wordContent": "sky",
+                "wordPartofspeech": "noun",
+                "wordInterpretation": null,
+                "wordGrade": 3,
+                "wordSource": "第一单元",
+                "createBy": "admin",
+                "updateBy": null,
+                "createTime": null,
+                "updateTime": null
+            }
+        ],
+        "ParagraphId": 1
+    }
+}
+```
+
+響應(錯誤)
+
+```
+{
+    "code": 40002,
+    "msg": "教材所屬年級必填",
+    "data": null
+}
+```
+
+### 刪除教材
+
+**URL**
+```
+Delete /elearning/paragraph/delete
+```
+
+**請求参数**
+
+| 參數名稱 | 參數類型 | 參數描述 | 可否為null |
+| :-: | :-: | :-: | :-: |
+| paragraphId | Int | 需要刪除的教材的ID | :x: |
+
+**響應参数**
+
+無
+
+**示例**
+
+請求參數
+
+```
+paragraphId: 1
+```
+
+響應(正確)
+
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": null
+}
+```
+
+響應(錯誤)
+
+```
+{
+    "code": 40004,
+    "msg": "內容不存在",
+    "data": null
+}
+```
+
+### 教材列表查詢
+
+#### 按教材ID查詢
+
+**URL**
+```
+Get /elearning/paragraph/query
+```
+
+**請求参数**
+
+| 參數名稱 | 參數類型 | 參數描述 | 可否為null |
+| :-: | :-: | :-: | :-: |
+| paragraphId | Int | 欲查詢的教材的ID | :x: |
+
+**響應参数**
+
+| 參數名稱 | 參數類型 | 參數描述 |
+| :-: | :-: | :-: |
+| paragraph | Paragraph |[教材細節](#) |
+
+**示例**
+
+請求參數
+
+```
+paragraphId: 1
+```
+
+響應(正確)
+
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "paragraphId": 1,
+        "paragraphLevel": 300,
+        "paragraphWordCount": 10,
+        "paragraphSentenceLength": 1,
+        "paragraphContent": "He sees all ... to the girl.",
+        "paragraphHashtag": "1",
+        "paragraphGrade": "3",
+        "paragraphSource": "1",
+        "createBy": "admin",
+        "updateBy": null,
+        "createTime": 1509549220000,
+        "updateTime": 1509549220000
+    },
+}
+```
+
+響應(錯誤)
+
+```
+{
+    "code": 40004,
+    "msg": "內容不存在",
+    "data": null
+}
+```
+
+#### 按年級或難易度查詢單字
+
+**URL**
+```
+Get /elearning/paragraph/list
+```
+
+**請求参数**
+
+| 參數名稱 | 參數類型 | 參數描述 | 可否為null |
+| :-: | :-: | :-: | :-: |
+| grade | String | 欲查詢年級(grade和level不能同時為空)(default為3) | :o: |
+| level | Int | 欲查詢難易度 | :o: |
+| range | Int | 難易度範圍(default為5) | :o: |
+| page | Int | 頁數(default為0) | :o: |
+| size | Int | 每頁顯示數量(default為20) | :o: |
+
+**響應参数**
+
+| 參數名稱 | 參數類型 | 參數描述 |
+| :-: | :-: | :-: |
+| paragraphList | List<Paragraph> | 教材列表[教材細節](#) |
+| count | Int | 符合條件的教材個數 |
+
+**示例**
+
+請求參數
+
+```
+grade: "3"
+page: 0
+size: 20
+```
+
+響應(正確)
+
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "paragraphList": [
+            {
+                "paragraphId": 831,
+                "paragraphLevel": 300,
+                "paragraphWordCount": 1,
+                "paragraphSentenceLength": 1,
+                "paragraphContent": "He sees all ... to the girl.",
+                "paragraphHashtag": "1",
+                "paragraphGrade": "3",
+                "paragraphSource": "1",
+                "createBy": "admin",
+                "updateBy": null,
+                "createTime": 1509549220000,
+                "updateTime": 1509549220000
+            },
+            ...
+            {
+                "paragraphId": 1853,
+                "paragraphLevel": 300,
+                "paragraphWordCount": 36,
+                "paragraphSentenceLength": 7,
+                "paragraphContent": "A man is ... will be fine.",
+                "paragraphHashtag": "1",
+                "paragraphGrade": "3",
+                "paragraphSource": "1",
+                "createBy": "admin",
+                "updateBy": null,
+                "createTime": 1509715215000,
+                "updateTime": 1509715215000
+            }
+        ],
+        "count": 10
+    }
+}
+```
+
+響應(錯誤)
+
+```
+{
+    "code": 40002,
+    "msg": "參數不完整",
+    "data": null
+}
+```
+
 ## 附錄
 
 ### 錯誤碼列表
@@ -497,4 +791,146 @@ size: 20
 
 ## API更新日誌
 
+## 尚未上線部分
 
+### 單字量分佈情況
+
+**URL**
+```
+Get /elearning/word/pie
+```
+
+参数
+
+```
+null
+```
+
+返回
+
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "grade6": 835,
+        "grade5": 930,
+        "grade4": 579,
+        "grade3": 1353
+    }
+}
+```
+
+## 考卷
+### 自動產生考卷
+
+```
+Get /elearning/exam/autoGenerateExam
+```
+参数
+```
+//examNumber default 3
+grade: 3
+examNumber: 3
+```
+返回
+```
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "examId": null,
+        "examTitle": "AutoGenerateExam",
+        "examLevel": 600,
+        "examType": null,
+        "examGrade": "3",
+        "examNumber": 3,
+        "examHashtag": "President...;Running...;LGBT;",
+        "createBy": "AutoGenerate",
+        "updateBy": null,
+        "createTime": null,
+        "updateTime": null,
+        "questionDTOList": [
+            {
+                "questionId": null,
+                "questionLevel": 600,
+                "questionType": 2,
+                "questionAutoCreate": 1,
+                "questionParagraphId": 1868,
+                "questionContent": " _1_ President ... from now!",
+                "questionGrade": "6",
+                "questionSource": "http ... level-1/",
+                "questionHashtag": "President ... level 1",
+                "createBy": "AutoGenerate",
+                "updateBy": null,
+                "createTime": null,
+                "updateTime": null,
+                "answerDTOList": [
+                    {
+                        "answerOrders": null,
+                        "title": "1",
+                        "rightvalue": "French",
+                        "wrongvalue1": "wine",
+                        "wrongvalue2": "win",
+                        "wrongvalue3": "slow"
+                    },
+                    ...
+                    {
+                        "answerOrders": null,
+                        "title": "11",
+                        "rightvalue": "maybe",
+                        "wrongvalue1": "whose",
+                        "wrongvalue2": "die",
+                        "wrongvalue3": "please"
+                    }
+                ]
+            },
+            ...
+            {
+                "questionId": null,
+                "questionLevel": 600,
+                "questionType": 2,
+                "questionAutoCreate": 1,
+                "questionParagraphId": 1875,
+                "questionContent": " _1_ the USA ... have weapons.",
+                "questionGrade": "6",
+                "questionSource": "https ... level-1/",
+                "questionHashtag": "LGBT Groups Take Up Weapons – level 1",
+                "createBy": "AutoGenerate",
+                "updateBy": null,
+                "createTime": null,
+                "updateTime": null,
+                "answerDTOList": [
+                    {
+                        "answerOrders": null,
+                        "title": "1",
+                        "rightvalue": "in",
+                        "wrongvalue1": "ago",
+                        "wrongvalue2": "ready",
+                        "wrongvalue3": "being"
+                    },
+                    ...
+                    {
+                        "answerOrders": null,
+                        "title": "8",
+                        "rightvalue": "so",
+                        "wrongvalue1": "rose",
+                        "wrongvalue2": "issue",
+                        "wrongvalue3": "saw"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+```
+{
+    "code": 400,
+    "msg": "參數不正確",
+    "data": null
+}
+```
+
+### 新增考卷
